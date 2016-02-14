@@ -1,8 +1,13 @@
+#!/usr/bin/python
 import os, re
 from clint.textui import puts, prompt, validators, progress
 import requests, feedparser
 
 t_length = os.get_terminal_size().columns
+
+
+def clear():
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 
 def geturl(url, dst):
@@ -48,24 +53,32 @@ def get_data(link, json=True):
 
 
 def main():
-    podcast_search = prompt.query("Podcast you want to download: ")
-    podcast_search = re.sub(r" ", "+", podcast_search)
-    url = "https://itunes.apple.com/search?term=" + podcast_search + "&entity=podcast"
-    data = get_data(url)
-    result_count = int(data["resultCount"])
-    puts("{:d} results were found. Displaying the top ten now".format(result_count))
-    for i in range(result_count):
-        puts("{:d}: {:s}"[:t_length].format(
-            i + 1,
-            data["results"][i]["trackName"]
-        ))
-        puts("  artist: {:s}"[:t_length].format(
-            data["results"][i]["artistName"]
-        ))
     while True:
-        user_selection = int(prompt.query("Enter a number (0 if None): ", validators=[
+        podcast_search = prompt.query("Podcast you want to download: ")
+        clear()
+        podcast_search = re.sub(r" ", "+", podcast_search)
+        url = "https://itunes.apple.com/search?term=" + podcast_search + "&entity=podcast"
+        data = get_data(url)
+        result_count = int(data["resultCount"])
+        if result_count <= 0:
+            puts('No results found, please search again')
+            continue
+        puts("{:d} results were found. Displaying the top ten now".format(result_count))
+        for i in range(result_count):
+            puts("{:d}: {:s}"[:t_length].format(
+                i + 1,
+                data["results"][i]["trackName"]
+            ))
+            if len(data["results"][i]["artistName"]) > 40:
+                data["results"][i]["artistName"] = data["results"][i]["artistName"][0:40]+'...'
+            puts("\tArtist: {:s}"[:t_length].format(
+                data["results"][i]["artistName"]
+            ))
+            puts()
+        user_selection = int(prompt.query("Enter podcast number (0 if None): ", validators=[
             validators.IntegerValidator()
         ]))
+        clear()
         if user_selection == 0:
             raise SystemExit('Goodbye!')
         elif 0 < user_selection <= result_count:
@@ -74,7 +87,7 @@ def main():
             puts("You have selected {:s}".format(podcast_name))
             break
         else:
-            puts("Please search again.")
+            puts("Incorrect number, please search again.")
     url = "https://itunes.apple.com/lookup?id=" + str(podcast_id) + "&entity=podcast"
     data = get_data(url)
     rss_url = data["results"][0]["feedUrl"]
@@ -91,8 +104,10 @@ def main():
     num_titles = len(titles)
 
     puts("{:d} titles found, printing the latest 10...".format(num_titles))
+
     for i in range(min(10, len(titles))):
         puts('[{:d}] {:s}'.format(i+1, titles[i].strip('\n')))
+    puts()
 
     download_all = False
     download_one = -1
@@ -111,6 +126,7 @@ def main():
             'Specific file',
             'Range'
         ])
+        clear()
         if user_download == 1:
             download_all = True
         elif user_download == 2:
@@ -119,6 +135,7 @@ def main():
             user_download = prompt.query('Enter file number', validators=[
                 validators.IntegerValidator()
             ])
+            clear()
             if 0 < user_download < 11:
                 download_one = len(mp3list) - int(user_download) + 1
             else:
@@ -126,6 +143,7 @@ def main():
                 continue
         else:
             user_download = prompt.query('Enter file range (ex: 1 - 3)')
+            clear()
             if '-' in user_download:
                 try:
                     range_list = [int(num.strip()) for num in user_download.split('-')]
