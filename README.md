@@ -1,6 +1,6 @@
 # PyCast3
 
-![gif](https://raw.githubusercontent.com/Arthelon/PyCast3/master/PyCast3_demo.gif)
+![gif](https://raw.githubusercontent.com/Arthelon/PyCast3/master/PyCast3_demo.gif)  
 Python3 implementation of @sacert's [PyCast](https://github.com/sacert/PyCast) with external libraries 
 and bug fixes.
 Provides support for more podcast feeds and file extensions.
