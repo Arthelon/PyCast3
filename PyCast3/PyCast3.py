@@ -44,7 +44,6 @@ def get_data(link, json=True):
         raise SystemExit(
             "There was an error retrieving the data. Check your internet connection and try again."
         )
-    # print(req.content)
     if json:
         return req.json()
     return req.content
