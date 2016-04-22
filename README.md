@@ -5,7 +5,7 @@ Python3 implementation of @sacert's [PyCast](https://github.com/sacert/PyCast) w
 and bug fixes.
 Provides support for more podcast feeds and file extensions.
 
-##### Installation
+### Installation
 
 Either download and install or pip it
 
@@ -21,7 +21,7 @@ OR
 $ sudo pip install https://github.com/Arthelon/PyCast3/archive/master.zip
 ```
 
-##### Usage:
+### Usage:
 
 Navigate to the directory where you want to save podcast files and use the follow command
 

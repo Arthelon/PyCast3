@@ -1,6 +1,0 @@
-args
-clint
-feedparser
-requests
-pip
-setuptools

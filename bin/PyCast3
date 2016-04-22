@@ -158,7 +158,7 @@ def main():
                 bad_input = True
                 continue
         break
-    base_path = os.path.dirname(os.path.realpath(__file__))
+    base_path = os.getcwd()
     if download_all:
         for i in range(len(mp3list)):
             puts("Downloading: {:s}".format(titles[i]))
